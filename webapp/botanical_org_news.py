@@ -1,6 +1,7 @@
 # from datetime import datetime
 
 from cgitb import html, text
+from itertools import count
 # from turtle import title
 from unittest import result
 from bs4 import BeautifulSoup
@@ -23,28 +24,21 @@ def get_manuals():
             soup = BeautifulSoup(html, 'html.parser')
             all_manuals = soup.findAll('li')
             result_manuals = []
-            # print(all_manuals)
             base_url = "https://en.wikipedia.org"
             for manuals in all_manuals:
-                # title = manuals.find('a')
                 item = manuals.find('a')
                 title = item.text
                 relative_url = item['href']
                 url = f'{base_url}{relative_url}'
-                result_manuals.append({
-                    "title": title,
-                    "url": url
-                })
-            return result_manuals
-                # save_manuals(item, relative_url, url)
+                save_manuals(title, url)
         except AttributeError:
             print(AttributeError)
-            return result_manuals
-    return False
-
+        # save_manuals(title, url)
+        
 def save_manuals(title, url):
-    manuals_manuals = Manuals(title=title, url=url)
-    db.session.add(manuals_manuals)
-    db.session.commit()
-
-    save_manuals(title, url)
+    manuals_exists = Manuals.query.filter(Manuals.url == url).count()
+    print(manuals_exists)
+    if not manuals_exists:
+        manuals_manuals = Manuals(title=title, url=url)
+        db.session.add(manuals_manuals)
+        db.session.commit()

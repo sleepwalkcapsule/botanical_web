@@ -5,7 +5,8 @@ from itertools import count
 # from turtle import title
 from unittest import result
 from bs4 import BeautifulSoup
-from webapp.model import db, Manuals
+from webapp.db import db 
+from webapp.manuals.models import Manuals
 import requests
 
 def get_html(url):
@@ -33,7 +34,6 @@ def get_manuals():
                 save_manuals(title, url)
         except AttributeError:
             print(AttributeError)
-        # save_manuals(title, url)
         
 def save_manuals(title, url):
     manuals_exists = Manuals.query.filter(Manuals.url == url).count()

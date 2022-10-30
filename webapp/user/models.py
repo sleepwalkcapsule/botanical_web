@@ -1,19 +1,7 @@
-from enum import unique
-from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 
-db = SQLAlchemy()
-
-class Manuals(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String, nullable=False)
-    url = db.Column(db.String, unique=True, nullable=False)
-    text = db.Column(db.Text, nullable=True)
-
-    def __repr__(self):
-        return '<Manuals {} {}>'.format(self.title, self.url)
+from webapp.db import db
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
